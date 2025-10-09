@@ -202,3 +202,8 @@ struct EditMemberPayload: Encodable {
     var timeout: String?
     var remove: [Remove]?
 }
+
+struct CreateWebhookPayload: Encodable {
+    var name: String
+    var avatar: String?
+}

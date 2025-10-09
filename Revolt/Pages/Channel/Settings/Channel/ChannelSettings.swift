@@ -31,6 +31,15 @@ struct ChannelSettings: View {
                     Image(systemName: "list.bullet")
                     Text("Permissions")
                 }
+                
+                if let server = Binding($server) {
+                    NavigationLink {
+                        ChannelWebhookSettings(server: server, channel: $channel)
+                    } label: {
+                        Image(systemName: "cloud.fill")
+                        Text("Webhooks")
+                    }
+                }
             }
             .listRowBackground(viewState.theme.background2)
             

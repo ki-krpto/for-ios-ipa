@@ -1,5 +1,5 @@
 {
-  "originHash" : "79c89dfa9d2fa761c0b56abcf53e1a9cbd5f9729b18c8eaa03e4dedb68003b29",
+  "originHash" : "1678793659e488b0541cf0ebfd234d774dd84fa94df25948db21768700b16a5f",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -38,15 +38,6 @@
       }
     },
     {
-      "identity" : "components-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/livekit/components-swift",
-      "state" : {
-        "revision" : "f640b51cf38687b77e598df035ce93720d04365a",
-        "version" : "0.1.1"
-      }
-    },
-    {
       "identity" : "grid",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/exyte/Grid",
@@ -78,7 +69,6 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
       "state" : {
-        "branch" : "master",
         "revision" : "e0c7eebc5a4465a3c4680764f26b7a61f567cdaf"
       }
     },
@@ -141,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-case-paths",
       "state" : {
-        "revision" : "71344dd930fde41e8f3adafe260adcbb2fc2a3dc",
-        "version" : "1.5.4"
+        "revision" : "9810c8d6c2914de251e072312f01d3bf80071852",
+        "version" : "1.7.1"
       }
     },
     {
@@ -213,8 +203,16 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/benedom/SwiftyCrop",
       "state" : {
-        "branch" : "master",
         "revision" : "ef27522c4850ccc899b0f4f745bfcc3aee892dfc"
+      }
+    },
+    {
+      "identity" : "swipeactions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/aheze/SwipeActions",
+      "state" : {
+        "revision" : "41e6f6dce02d8cfa164f8c5461a41340850ca3ab",
+        "version" : "1.1.0"
       }
     },
     {
@@ -242,6 +240,14 @@
       "state" : {
         "revision" : "357ca1e5dd31f613a1d43320870ebc219386a495",
         "version" : "1.2.2"
+      }
+    },
+    {
+      "identity" : "zoomable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ryohey/Zoomable",
+      "state" : {
+        "revision" : "525c0e1784825261b84d21c5cd5a159245a40ea6"
       }
     }
   ],

@@ -2,7 +2,7 @@ import SwiftUI
 import Sentry
 import Types
 
-let DEFAULT_API_URL: String = "https://api.revolt.chat/0.8"
+let DEFAULT_API_URL: String = "https://api.stoat.chat"
 
 @main
 struct RevoltApp: App {
@@ -23,7 +23,7 @@ struct RevoltApp: App {
                 options.profilesSampleRate = 1.0
                 options.attachViewHierarchy = true
                 options.enableAppLaunchProfiling = true
-                options.enableMetrics = true
+//                options.enableMetrics = true
             }
         }
     }
@@ -211,12 +211,20 @@ struct InnerApp: View {
 
 struct MainApp: View {
     @EnvironmentObject var viewState: ViewState
+    #if !DEBUG
+    @State var alphaAlert = true
+    #else
+    @State var alphaAlert = false
+    #endif
     
     var body: some View {
-        HomeRewritten(
+        Home(
             currentSelection: $viewState.currentSelection,
             currentChannel: $viewState.currentChannel
         )
+        .alert("Warning", isPresented: $alphaAlert, actions: {}, message: {
+            Text("This app is in very early alpha and is expected to be unfinished and crash in lots of places, if you wish for a stable expierence please use the web app for the time being.")
+        })
         .navigationDestination(for: NavigationDestination.self) { dest in
             switch dest {
                 case .channel_info(let id):

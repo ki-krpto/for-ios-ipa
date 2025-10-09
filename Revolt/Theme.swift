@@ -39,7 +39,7 @@ func parseHex(hex: String) -> (Double, Double, Double, Double) {
     )
 }
 
-enum ConstantType {
+enum ConstantType: String, Hashable, Equatable {
     case deg, grad, rad, turn
 }
 
@@ -53,7 +53,7 @@ let angleParser = Parse(input: Substring.self) {
     }
 }
 
-enum DirectionType {
+enum DirectionType: String, Hashable, Equatable {
     case left, right, top, bottom
 }
 
@@ -66,18 +66,20 @@ let directionParser = Parse(input: Substring.self) {
     }
 }
 
-enum ColorType {
-    case name(Substring)
-    case hex(Substring)
+enum ColorType: Hashable, Equatable {
+    case name(String)
+    case hex(String)
     case rgba(Int, Int, Int, Int)
 }
 
 let colorParser = Parse(input: Substring.self) {
+    Skip { Many { " " } }
+    
     OneOf {
         Parse {
             "#"
             CharacterSet(charactersIn: "ABCDEFabcdef1234567890")
-        }.map(ColorType.hex)
+        }.map { ColorType.hex(String($0)) }
 
         Parse {
             "rgb("
@@ -92,11 +94,13 @@ let colorParser = Parse(input: Substring.self) {
         }.map { cs in ColorType.rgba(cs[0], cs[1], cs[2], 255) }
         
         CharacterSet.alphanumerics
-            .map(ColorType.name)
+            .map { ColorType.name(String($0)) }
     }
+    
+    Skip { Many { " " } }
 }
 
-struct Length {
+struct Length: Hashable, Equatable {
     enum LengthType {
         case px
     }
@@ -119,7 +123,7 @@ let percentageParser = Parse(input: Substring.self) {
     "%"
 }
 
-enum PercentageType {
+enum PercentageType: Hashable, Equatable {
     case length(Length)
     case percentage(Int)
     
@@ -131,19 +135,42 @@ enum PercentageType {
                 return p
         }
     }
+    
+    var amount: Int {
+        switch self {
+            case .length(let length):
+                return length.amount
+            case .percentage(let int):
+                return int
+        }
+    }
 }
 
-struct ColorStop {
+struct ColorStop: Hashable, Equatable {
     var color: ColorType
     var percentage: PercentageType?
 }
 
-enum AngleType {
-    case constant(Double, ConstantType)
-    case direction(DirectionType, DirectionType?)
+struct MultiDirectionType: Hashable, Equatable {
+    var a: DirectionType
+    var b: DirectionType?
 }
 
-struct LinearGradiant {
+enum AngleType: Hashable, Equatable {
+    case constant(Double, ConstantType)
+    case direction(MultiDirectionType)
+    
+    var isDirection: Bool {
+        switch self {
+            case .constant:
+                return false
+            case .direction:
+                return true
+        }
+    }
+}
+
+struct LinearGradiant: Hashable, Equatable {
     var angle: AngleType?
     var stops: [ColorStop]
 }
@@ -152,7 +179,10 @@ let linearGradiantParser = Parse(input: Substring.self) { inp in
     LinearGradiant(angle: inp.0, stops: inp.1)
 } with: {
     "linear-gradient("
+    
     Optionally {
+        Skip { Many { " " } }
+        
         OneOf {
             angleParser.map { AngleType.constant($0.0, $0.1) }
             Parse {
@@ -167,15 +197,15 @@ let linearGradiantParser = Parse(input: Substring.self) { inp in
                 Optionally {
                     directionParser
                 }
-            }.map { AngleType.direction($0.0, $0.1) }
+            }.map { AngleType.direction(MultiDirectionType(a: $0.0, b: $0.1)) }
         }
-    }
-    
-    Skip {
-        Many { " " }
+        
+        Skip { Many { " " } }
+        
         ","
-        Many { " " }
     }
+
+    Skip { Many { " " } }
     
     Many(2...) {
         Parse {
@@ -193,24 +223,36 @@ let linearGradiantParser = Parse(input: Substring.self) { inp in
         ","
         Many { " " }
     }
+    
+    Skip { Many { " " } }
+    
     ")"
 }
 
 let variableColorParser = Parse(input: Substring.self) {
     "var("
-    Prefix(1...) { c in c != ")" }
+    Prefix(1...) { c in c != ")" }.map { $0.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) }
     ")"
 }
 
-enum CssColor {
+enum CssColor: Hashable, Equatable {
     case linear_gradiant(LinearGradiant)
     case simple(ColorType)
-    case variable(Substring)
+    case variable(String)
+    
+    func asLinearGradient() -> LinearGradiant? {
+        switch self {
+            case .linear_gradiant(let linearGradiant):
+                return linearGradiant
+            default:
+                return nil
+        }
+    }
 }
 
 let CSSColorParser = Parse(input: Substring.self) {
     OneOf {
-        variableColorParser.map(CssColor.variable)
+        variableColorParser.map { CssColor.variable(String($0)) }
         linearGradiantParser.map(CssColor.linear_gradiant)
         colorParser.map(CssColor.simple)
     }
@@ -243,16 +285,16 @@ func resolveColor(color: ColorType) -> Color {
     }
 }
 
-func resolveVariable(currentTheme: Theme, name: Substring) -> AnyShapeStyle {
+func resolveVariable(currentTheme: Theme, name: String) -> Color {
     switch name {
         case "--accent":
-            return AnyShapeStyle(currentTheme.accent)
+            return currentTheme.accent.color
         case "--foreground":
-            return AnyShapeStyle(currentTheme.foreground)
+            return currentTheme.foreground.color
         case "--background":
-            return AnyShapeStyle(currentTheme.background)
+            return currentTheme.background.color
         default:
-            return AnyShapeStyle(.black)
+            return .black
     }
 }
 
@@ -296,84 +338,169 @@ func unitSquareIntersectionPoint(angle: Double) -> UnitPoint {
     return .zero
 }
 
-func directionToUnits(d1: DirectionType, d2: DirectionType?) -> (UnitPoint, UnitPoint) {
-    switch (d1, d2) {
+func directionToUnits(direction: MultiDirectionType) -> (UnitPoint, UnitPoint) {
+    switch (direction.a, direction.b) {
         case (.left, .top), (.top, .left):
-            return (.topLeading, .bottomTrailing)
-        case (.left, .bottom), (.bottom, .left):
-            return (.bottomLeading, .topTrailing)
-        case (.right, .top), (.top, .right):
-            return (.topTrailing, .bottomLeading)
-        case (.right, .bottom), (.bottom, .right):
             return (.bottomTrailing, .topLeading)
+        case (.left, .bottom), (.bottom, .left):
+            return (.topTrailing, .bottomLeading)
+        case (.right, .top), (.top, .right):
+            return (.bottomLeading, .topTrailing)
+        case (.right, .bottom), (.bottom, .right):
+            return (.topLeading, .bottomTrailing, )
         case (.left, nil):
-            return (.leading, .trailing)
-        case (.right, nil):
             return (.trailing, .leading)
+        case (.right, nil):
+            return (.leading, .trailing)
         case (.top, nil):
-            return (.top, .bottom)
-        case (.bottom, nil):
             return (.bottom, .top)
+        case (.bottom, nil):
+            return (.top, .bottom)
         default:
-            return directionToUnits(d1: d1, d2: nil)
+            return directionToUnits(direction: MultiDirectionType(a: direction.a, b: nil))
     }
 }
 
-func parseCSSColor(currentTheme: Theme, input: String) -> AnyShapeStyle {
+func parseCSSColorToShapeStyle(currentTheme theme: Theme, input: String) -> AnyShapeStyle {
+    let output = parseCSSColor(input: input)
+    
+    return convertCSSColorToShapeStyle(currentTheme: theme, input: output)
+}
+
+func parseCSSColor(input: String, default d: CssColor? = nil) -> CssColor {
     do {
-        let output = try CSSColorParser.parse(input)
-        
-        switch output {
-            case .simple(let color):
-                return AnyShapeStyle(resolveColor(color: color))
-                
-            case .variable(let name):
-                return resolveVariable(currentTheme: currentTheme, name: name)
-                
-            case .linear_gradiant(let grad):
-                var start: UnitPoint
-                var end: UnitPoint
-                
-                switch grad.angle {
-                    case .direction(let d1, let d2):
-                        (start, end) = directionToUnits(d1: d1, d2: d2)
-                    
-                    case .constant(let value, let ty):
-                        switch ty {
-                            case .deg:
-                                start = unitSquareIntersectionPoint(angle: value + 90.0)
-                                end = unitSquareIntersectionPoint(angle: value - 90.0)
-                            case .grad:
-                                start = unitSquareIntersectionPoint(angle: (value * 0.9) + 90.0)
-                                end = unitSquareIntersectionPoint(angle: (value * 0.9) - 90.0)
-
-                            case .rad:
-                                start = unitSquareIntersectionPoint(angle: (value * (180/Double.pi)) + 90.0)
-                                end = unitSquareIntersectionPoint(angle: (value * (180/Double.pi)) - 90.0)
-
-                            case .turn:
-                                start = unitSquareIntersectionPoint(angle: (value * 360.0) + 90.0)
-                                end = unitSquareIntersectionPoint(angle: (value * 360.0) - 90.0)
-                        }
-                    case nil:
-                        start = .top
-                        end = .bottom
-                }
-
-                
-                if grad.stops.allSatisfy({ $0.percentage?.toPercentage != nil }) {
-                    let stops: [Gradient.Stop] = grad.stops.map { stop in Gradient.Stop(color: resolveColor(color: stop.color), location: CGFloat(Double(stop.percentage!.toPercentage!) / 100.0)) }
-                    return AnyShapeStyle(LinearGradient(stops: stops, startPoint: start, endPoint: end))
-                } else {
-                    let colors = grad.stops.map { resolveColor(color: $0.color) }
-
-                    return AnyShapeStyle(LinearGradient(colors: colors, startPoint: start, endPoint: end))
-                }
-        }
+        return try CSSColorParser.parse(input)
     } catch let e {
         SentrySDK.capture(error: e)
         themeLogger.error("CSS Parser error: \(e)")
-        return AnyShapeStyle(Color.black)
+        return d ?? CssColor.simple(.hex("0xFFFFFFFF"))
+    }
+}
+
+func convertCSSColorToShapeStyle(currentTheme theme: Theme, input: CssColor) -> AnyShapeStyle {
+    switch input {
+        case .simple(let color):
+            return AnyShapeStyle(resolveColor(color: color))
+            
+        case .variable(let name):
+            return AnyShapeStyle(resolveVariable(currentTheme: theme, name: name))
+            
+        case .linear_gradiant(let grad):
+            var start: UnitPoint
+            var end: UnitPoint
+            
+            switch grad.angle {
+                case .direction(let direction):
+                    (start, end) = directionToUnits(direction: direction)
+                    
+                case .constant(let value, let ty):
+                    switch ty {
+                        case .deg:
+                            start = unitSquareIntersectionPoint(angle: value + 90.0)
+                            end = unitSquareIntersectionPoint(angle: value - 90.0)
+                        case .grad:
+                            start = unitSquareIntersectionPoint(angle: (value * 0.9) + 90.0)
+                            end = unitSquareIntersectionPoint(angle: (value * 0.9) - 90.0)
+                            
+                        case .rad:
+                            start = unitSquareIntersectionPoint(angle: (value * (180/Double.pi)) + 90.0)
+                            end = unitSquareIntersectionPoint(angle: (value * (180/Double.pi)) - 90.0)
+                            
+                        case .turn:
+                            start = unitSquareIntersectionPoint(angle: (value * 360.0) + 90.0)
+                            end = unitSquareIntersectionPoint(angle: (value * 360.0) - 90.0)
+                    }
+                case nil:
+                    start = .top
+                    end = .bottom
+            }
+            
+            if grad.stops.allSatisfy({ $0.percentage?.toPercentage != nil }) {
+                let stops: [Gradient.Stop] = grad.stops.map { stop in Gradient.Stop(color: resolveColor(color: stop.color), location: CGFloat(Double(stop.percentage!.toPercentage!) / 100.0)) }
+                return AnyShapeStyle(LinearGradient(stops: stops, startPoint: start, endPoint: end))
+            } else {
+                let colors = grad.stops.map { resolveColor(color: $0.color) }
+                
+                return AnyShapeStyle(LinearGradient(colors: colors, startPoint: start, endPoint: end))
+            }
+    }
+}
+
+func convertCSSColorToString(input: CssColor) -> String {
+    var parts: [String] = []
+    
+    switch input {
+        case .linear_gradiant(let linearGradiant):
+            parts.append("linear-gradient(")
+            
+            if let angle = linearGradiant.angle {
+                switch angle {
+                    case .constant(let double, let constantType):
+                        parts.append("\(Int(double))\(constantType)")
+                        
+                    case .direction(let direction):
+                        parts.append("to")
+                        parts.append(direction.a.rawValue)
+                        
+                        if let b = direction.b {
+                            parts.append(b.rawValue)
+                        }
+                }
+                
+                parts.append(",")
+            }
+            
+            for stop in linearGradiant.stops {
+                parts.append(convertColorTypeToString(input: stop.color))
+                
+                if let percentage = stop.percentage {
+                    switch percentage {
+                        case .length(let length):
+                            parts.append("\(Int(length.amount))\(length.type)")
+                        case .percentage(let int):
+                            parts.append("\(int)%")
+                    }
+                }
+                
+                parts.append(",")
+            }
+            
+            _ = parts.popLast()
+            
+            parts.append(")")
+            
+        case .simple(let colorType):
+            parts.append(convertColorTypeToString(input: colorType))
+        case .variable(let string):
+            parts.append(contentsOf: ["var(", string, ")"])
+    }
+    
+    return parts.joined(separator: " ")
+}
+
+func convertCSSColorToColorType(input: String) -> ColorType {
+    do {
+        return try colorParser.parse(input)
+    } catch {
+        print(error)
+        
+        return .hex("FFFFFFFF")
+    }
+}
+
+func convertColorTypeToString(input: ColorType) -> String {
+    switch input {
+        case .name(let string):
+            return string
+        case .hex(let string):
+            return "#\(string)"
+        case .rgba(let r, let g, let b, let a):
+            let r = String(r, radix: 16, uppercase: true).padding(toLength: 2, withPad: "0", startingAt: 0)
+            let g = String(g, radix: 16, uppercase: true).padding(toLength: 2, withPad: "0", startingAt: 0)
+            let b = String(b, radix: 16, uppercase: true).padding(toLength: 2, withPad: "0", startingAt: 0)
+            let a = String(a, radix: 16, uppercase: true).padding(toLength: 2, withPad: "0", startingAt: 0)
+            
+            return "#\(r)\(g)\(b)\(a)"
     }
 }
 

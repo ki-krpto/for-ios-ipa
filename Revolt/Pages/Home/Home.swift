@@ -55,7 +55,7 @@ struct MaybeChannelView: View {
     }
 }
 
-struct HomeRewritten: View {
+struct Home: View {
     @EnvironmentObject var viewState: ViewState
     
     @Binding var currentSelection: MainSelection
@@ -225,6 +225,6 @@ struct HomeRewritten: View {
 #Preview {
     @StateObject var state = ViewState.preview().applySystemScheme(theme: .dark)
     
-    return HomeRewritten(currentSelection: $state.currentSelection, currentChannel: $state.currentChannel)
+    return Home(currentSelection: $state.currentSelection, currentChannel: $state.currentChannel)
             .environmentObject(state)
 }

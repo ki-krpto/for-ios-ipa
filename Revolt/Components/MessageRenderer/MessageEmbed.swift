@@ -16,7 +16,7 @@ struct MessageEmbed: View {
     
     func parseEmbedColor(color: String?) -> AnyShapeStyle {
         if let color {
-            return parseCSSColor(currentTheme: viewState.theme, input: color)
+            return parseCSSColorToShapeStyle(currentTheme: viewState.theme, input: color)
         } else {
             return AnyShapeStyle(viewState.theme.foreground3)
         }

@@ -27,7 +27,7 @@ struct ChannelPermissionsSettings: View {
                 case .text_channel, .voice_channel:
                     Section {
                         ForEach(Array(server!.roles ?? [:]).sorted(by: { a, b in a.value.rank < b.value.rank }), id: \.key) { pair in
-                            let roleColour = pair.value.colour.map { parseCSSColor(currentTheme: viewState.theme, input: $0) } ?? AnyShapeStyle(viewState.theme.foreground)
+                            let roleColour = pair.value.colour.map { parseCSSColorToShapeStyle(currentTheme: viewState.theme, input: $0) } ?? AnyShapeStyle(viewState.theme.foreground)
                             
                             NavigationLink {
                                 let overwrite = channel.role_permissions?[pair.key] ?? Overwrite(a: .none, d: .none)

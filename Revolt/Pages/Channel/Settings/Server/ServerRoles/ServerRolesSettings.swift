@@ -24,7 +24,7 @@ struct ServerRolesSettings: View {
                         RoleSettings(server: $server, roleId: pair.key, role: pair.value)
                     } label: {
                         Text(verbatim: pair.value.name)
-                            .foregroundStyle(pair.value.colour.map { parseCSSColor(currentTheme: viewState.theme, input: $0) } ?? AnyShapeStyle(viewState.theme.foreground))
+                            .foregroundStyle(pair.value.colour.map { parseCSSColorToShapeStyle(currentTheme: viewState.theme, input: $0) } ?? AnyShapeStyle(viewState.theme.foreground))
                     }
                 }
                 

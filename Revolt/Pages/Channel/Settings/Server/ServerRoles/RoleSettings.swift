@@ -17,7 +17,10 @@ struct RoleSettings: View {
     var roleId: String
     @State var initial: Role
     @State var currentValue: Role
+    @State var showAdvancedColourSheet: Bool = false
     
+    @State var cachedRoleColor: CssColor? = nil
+
     init(server s: Binding<Server>, roleId: String, role: Role) {
         self._server = s
         self.roleId = roleId
@@ -42,9 +45,16 @@ struct RoleSettings: View {
                     
                     Circle()
                         .frame(width: 24, height: 24)
-                        .foregroundStyle(currentValue.colour.map { parseCSSColor(currentTheme: viewState.theme, input: $0) } ?? AnyShapeStyle(viewState.theme.foreground))
-                    
+                        .foregroundStyle(currentValue.colour.map { parseCSSColorToShapeStyle(currentTheme: viewState.theme, input: $0) } ?? AnyShapeStyle(viewState.theme.foreground))
+
                 }
+                .listRowSeparator(.hidden)
+                
+                Button("Advanced Color options") {
+                    showAdvancedColourSheet.toggle()
+                }
+                .foregroundStyle(viewState.theme.accent)
+                .listRowBackground(viewState.theme.background2)
             }
             .listRowBackground(viewState.theme.background3)
             
@@ -78,11 +88,20 @@ struct RoleSettings: View {
         }
         .scrollContentBackground(.hidden)
         .background(viewState.theme.background)
+        .sheet(isPresented: $showAdvancedColourSheet) {
+            ColorSheet(value: Binding(
+                get: { parseCSSColor(input: currentValue.colour ?? "", default: cachedRoleColor) },
+                set: { value in
+                    cachedRoleColor = value
+                    currentValue.colour = convertCSSColorToString(input: value)
+                }
+            ))
+        }
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text(verbatim: initial.name)
                     .bold()
-                    .foregroundStyle(initial.colour.map { parseCSSColor(currentTheme: viewState.theme, input: $0) } ?? AnyShapeStyle(viewState.theme.foreground))
+                    .foregroundStyle(initial.colour.map { parseCSSColorToShapeStyle(currentTheme: viewState.theme, input: $0) } ?? AnyShapeStyle(viewState.theme.foreground))
             }
             
 #if os(iOS)
@@ -95,7 +114,7 @@ struct RoleSettings: View {
                     Button {
                         Task {
                             var payload = RoleEditPayload()
-                            
+
                             if initial.name != currentValue.name {
                                 payload.name = currentValue.name
                             }

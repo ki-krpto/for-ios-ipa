@@ -476,4 +476,16 @@ struct HTTPClient {
     func unbanUser(server: String, user: String) async -> Result<EmptyResponse, RevoltError> {
         await req(method: .delete, route: "/servers/\(server)/bans/\(user)")
     }
+    
+    func createWebhook(channel: String, body: CreateWebhookPayload) async -> Result<Webhook, RevoltError> {
+        await req(method: .post, route: "/channels/\(channel)/webhooks", parameters: body)
+    }
+    
+    func fetchWebhooks(channel: String) async -> Result<[Webhook], RevoltError> {
+        await req(method: .get, route: "/channels/\(channel)/webhooks")
+    }
+    
+    func deleteWebhook(webhook: String) async -> Result<EmptyResponse, RevoltError> {
+        await req(method: .delete, route: "/webhooks/\(webhook)")
+    }
 }

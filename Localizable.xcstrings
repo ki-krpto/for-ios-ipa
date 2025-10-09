@@ -4,7 +4,16 @@
     "" : {
 
     },
+    ":" : {
+
+    },
     "(edited)" : {
+
+    },
+    "[Privacy Policy](%@)" : {
+
+    },
+    "[Terms of Use](%@)" : {
 
     },
     "@" : {
@@ -16,7 +25,22 @@
     "@ on" : {
 
     },
+    "@%@" : {
+
+    },
+    "@everyone" : {
+
+    },
+    "@online" : {
+
+    },
+    "@Unknown" : {
+
+    },
     "#%@" : {
+
+    },
+    "%" : {
 
     },
     "%@" : {
@@ -32,8 +56,24 @@
         }
       }
     },
-    "%@ code" : {
+    "%@ joined" : {
 
+    },
+    "%@ pinned a message" : {
+
+    },
+    "%@ unpinned a message" : {
+
+    },
+    "%@#%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@#%2$@"
+          }
+        }
+      }
     },
     "%lld" : {
 
@@ -41,10 +81,19 @@
     "%lld of 100 members" : {
 
     },
+    "%lld users" : {
+
+    },
+    "•" : {
+
+    },
     "About" : {
 
     },
     "Accent" : {
+
+    },
+    "Accept Invite" : {
 
     },
     "Account Info" : {
@@ -59,6 +108,9 @@
     "Active Sessions" : {
 
     },
+    "Add a friend" : {
+
+    },
     "Add a server" : {
 
     },
@@ -68,10 +120,28 @@
     "Add Authenticator" : {
       "comment" : "User settings button"
     },
-    "add friend" : {
+    "Add bot" : {
+
+    },
+    "Add Bot" : {
 
     },
     "Add Friend" : {
+
+    },
+    "Advanced Color options" : {
+
+    },
+    "Allows others to invite the bot to their servers and groups" : {
+
+    },
+    "Angle" : {
+
+    },
+    "Angle Type" : {
+
+    },
+    "Api Url" : {
 
     },
     "Appearance" : {
@@ -98,10 +168,31 @@
     "Bans" : {
 
     },
+    "Bans - %lld" : {
+
+    },
     "Bio" : {
 
     },
+    "Block" : {
+
+    },
     "Bot" : {
+
+    },
+    "Bots" : {
+
+    },
+    "Bots are not verified by Revolt." : {
+
+    },
+    "Bottom" : {
+
+    },
+    "Bottom Left" : {
+
+    },
+    "Bottom Right" : {
 
     },
     "Brought to you with ❤️ by the Revolt team." : {
@@ -110,19 +201,31 @@
     "Busy" : {
 
     },
+    "By creating a bot, you are agreeing to the [Acceptable Usage Policy](https://revolt.chat/aup)." : {
+
+    },
     "Cancel" : {
+
+    },
+    "Cancel Friend Request" : {
 
     },
     "Categories" : {
 
     },
+    "Change identity on %@" : {
+
+    },
     "Change it" : {
-      "comment" : "'done' button for changing username"
+      "comment" : "'done' button for changing password\n'done' button for changing username"
     },
     "Change Password" : {
 
     },
     "Channel Icon" : {
+
+    },
+    "Channel Name" : {
 
     },
     "Client Settings" : {
@@ -131,11 +234,17 @@
     "code" : {
       "comment" : "TOTP code"
     },
-    "Code or link" : {
-
-    },
     "Code time" : {
       "comment" : "debug print, dont translate"
+    },
+    "Colour" : {
+
+    },
+    "Colour Style" : {
+
+    },
+    "Colours" : {
+
     },
     "Community Guidelines" : {
 
@@ -152,7 +261,16 @@
     "Confirm disabling your account" : {
 
     },
+    "Connected" : {
+
+    },
     "Connecting..." : {
+
+    },
+    "Constant" : {
+
+    },
+    "Constant Type" : {
 
     },
     "Conversations" : {
@@ -164,10 +282,16 @@
     "Copy ID" : {
 
     },
+    "Copy Invite Link" : {
+
+    },
     "Copy Link" : {
 
     },
-    "Copy message link" : {
+    "Copy Message ID" : {
+
+    },
+    "Copy Message Link" : {
 
     },
     "Copy Server ID" : {
@@ -179,16 +303,43 @@
     "Copy to clipboard" : {
 
     },
+    "Copy Token" : {
+
+    },
+    "Copy URL" : {
+
+    },
     "Create" : {
+
+    },
+    "Create a bot" : {
+
+    },
+    "Create a new role" : {
 
     },
     "Create a new server" : {
 
     },
+    "Create a new webhook" : {
+
+    },
     "Create Account" : {
 
     },
+    "Create Bot" : {
+
+    },
     "Create Group" : {
+
+    },
+    "Create Invite" : {
+
+    },
+    "Create Role" : {
+
+    },
+    "Create Webhook" : {
 
     },
     "Created %lld day(s) ago" : {
@@ -203,13 +354,31 @@
     "Dark" : {
 
     },
+    "Default" : {
+
+    },
+    "Deg" : {
+
+    },
     "Delete" : {
 
     },
     "Delete Account" : {
       "comment" : "User settings button"
     },
+    "Delete bot" : {
+
+    },
+    "Delete bot?" : {
+
+    },
     "Delete channel" : {
+
+    },
+    "Delete Message" : {
+
+    },
+    "Delete role" : {
 
     },
     "Delete server" : {
@@ -227,8 +396,17 @@
     "Didn't get an email?" : {
 
     },
+    "Direction" : {
+
+    },
     "Disable Account" : {
       "comment" : "User settings button"
+    },
+    "Disabled" : {
+
+    },
+    "Disconnected" : {
+
     },
     "Discovery" : {
 
@@ -239,7 +417,13 @@
     "Done" : {
 
     },
-    "Edit" : {
+    "Edit Message" : {
+
+    },
+    "Edit Permissions" : {
+
+    },
+    "Edit profile" : {
 
     },
     "Edit Server Profile" : {
@@ -254,13 +438,16 @@
     "Email Token" : {
 
     },
+    "Emoji Name" : {
+
+    },
     "Emojis" : {
 
     },
-    "Ending" : {
+    "Emojis - %lld" : {
 
     },
-    "enter" : {
+    "Enter a link like rvlt.gg/Testers or an invite code like Testers" : {
 
     },
     "Enter a new username" : {
@@ -284,6 +471,9 @@
     "Enter your Username" : {
 
     },
+    "everyone" : {
+
+    },
     "Experiments" : {
 
     },
@@ -291,9 +481,6 @@
 
     },
     "Focus" : {
-
-    },
-    "foo" : {
 
     },
     "Force remote notification upload" : {
@@ -320,6 +507,15 @@
     "Go back" : {
 
     },
+    "Grad" : {
+
+    },
+    "Gradient" : {
+
+    },
+    "Group TODO" : {
+
+    },
     "Hello, World!" : {
 
     },
@@ -338,6 +534,12 @@
     "Idle" : {
 
     },
+    "Interactions url" : {
+
+    },
+    "Invalid invite" : {
+
+    },
     "Invisible" : {
 
     },
@@ -347,10 +549,16 @@
     "Invite another user" : {
 
     },
+    "Invite code or link" : {
+
+    },
     "Invite Users" : {
 
     },
     "Invite your friends" : {
+
+    },
+    "Invited by" : {
 
     },
     "Invites" : {
@@ -360,6 +568,9 @@
 
     },
     "Join by invite code or link" : {
+
+    },
+    "Join Invite" : {
 
     },
     "Joined" : {
@@ -374,6 +585,9 @@
     "Leave Server" : {
 
     },
+    "Left" : {
+
+    },
     "Let's fix that" : {
 
     },
@@ -384,6 +598,9 @@
 
     },
     "Light" : {
+
+    },
+    "Loading" : {
 
     },
     "Loading Data..." : {
@@ -402,6 +619,12 @@
 
     },
     "Logout" : {
+
+    },
+    "Looks a bit empty in here." : {
+
+    },
+    "Mark as read" : {
 
     },
     "Members" : {
@@ -428,6 +651,15 @@
     "My Account" : {
 
     },
+    "My Bots" : {
+
+    },
+    "Name" : {
+
+    },
+    "NEW" : {
+
+    },
     "New Group" : {
 
     },
@@ -443,7 +675,16 @@
     "No hcaptcha support" : {
 
     },
+    "Note: this field is reserved for the future." : {
+
+    },
+    "Notification options" : {
+
+    },
     "Notifications" : {
+
+    },
+    "NSFW" : {
 
     },
     "Offline" : {
@@ -453,6 +694,9 @@
 
     },
     "One more thing" : {
+
+    },
+    "online" : {
 
     },
     "Online" : {
@@ -467,13 +711,22 @@
     "Password" : {
 
     },
+    "Percentage" : {
+
+    },
+    "Percentage Type" : {
+
+    },
     "Permissions" : {
 
     },
     "Pick a category" : {
 
     },
-    "Placeholder" : {
+    "Pin Message" : {
+
+    },
+    "Pins" : {
 
     },
     "Please note that this does not get sent to this server's moderators" : {
@@ -494,11 +747,26 @@
     "Push Notifications" : {
 
     },
+    "px" : {
+
+    },
+    "Rad" : {
+
+    },
     "React" : {
+
+    },
+    "Reactions" : {
+
+    },
+    "Reconnecting" : {
 
     },
     "Regenerate Recovery Codes" : {
       "comment" : "User settings button"
+    },
+    "Remove" : {
+
     },
     "Remove Authenticator" : {
       "comment" : "User settings button"
@@ -509,13 +777,28 @@
     "Report" : {
 
     },
+    "Report Message" : {
+
+    },
     "Report reason" : {
 
     },
     "Resend a verification email" : {
 
     },
+    "Reset" : {
+
+    },
     "Reset Password" : {
+
+    },
+    "Reset token" : {
+
+    },
+    "Reset token?" : {
+
+    },
+    "Revoke" : {
 
     },
     "Revolt" : {
@@ -525,6 +808,18 @@
 
     },
     "Revolt is one of the best ways to stay connected with your friends and community, anywhere, anytime." : {
+
+    },
+    "Right" : {
+
+    },
+    "Role Colour" : {
+
+    },
+    "Role Name" : {
+
+    },
+    "Role Rank" : {
 
     },
     "Roles" : {
@@ -545,13 +840,37 @@
     "Secondary Background" : {
 
     },
+    "Select Colour" : {
+
+    },
+    "Select Emoji" : {
+
+    },
     "Select File" : {
+
+    },
+    "Select Message" : {
+
+    },
+    "Select permission" : {
 
     },
     "Select Photo" : {
 
     },
     "Select Username" : {
+
+    },
+    "Send Friend Request" : {
+
+    },
+    "Send Message" : {
+
+    },
+    "Sent an attachment" : {
+
+    },
+    "Server Banner" : {
 
     },
     "Server Description" : {
@@ -572,19 +891,34 @@
     "Share Invite" : {
 
     },
+    "Sign out and switch instance" : {
+
+    },
     "Sign Up" : {
 
     },
     "Signed out... How did you get here?" : {
 
     },
+    "Simple" : {
+
+    },
     "Something went wrong. Try again later?" : {
+
+    },
+    "Stop %lld" : {
 
     },
     "Stop right there!" : {
 
     },
     "Submit" : {
+
+    },
+    "System Messages" : {
+
+    },
+    "Tap to reconnect" : {
 
     },
     "Tell us what's wrong with this message" : {
@@ -596,6 +930,12 @@
     "Text Field" : {
 
     },
+    "The bot will not be granted any permissions." : {
+
+    },
+    "The iOS app is current in early beta, plenty of features are unimplemented or buggy, if you want a better experience please use the web app on iOS for now." : {
+
+    },
     "The trolls have rejected your old password" : {
       "comment" : "The password was rejected by the server"
     },
@@ -603,6 +943,9 @@
 
     },
     "Theme" : {
+
+    },
+    "This app is in very early alpha and is expected to be unfinished and crash in lots of places, if you wish for a stable expierence please use the web app for the time being." : {
 
     },
     "This area is guarded by trolls. Fetch them your TOTP code to continue." : {
@@ -629,10 +972,28 @@
     "Todo" : {
 
     },
+    "TODO" : {
+
+    },
+    "Top" : {
+
+    },
+    "Top Left" : {
+
+    },
+    "Top Right" : {
+
+    },
     "Try again" : {
       "comment" : "the user entered an incorrect password"
     },
+    "Turn" : {
+
+    },
     "Two-Factor Authentication" : {
+
+    },
+    "Unban" : {
 
     },
     "unknown" : {
@@ -644,7 +1005,10 @@
     "Unknown message" : {
 
     },
-    "use a %@ code" : {
+    "Unpin Message" : {
+
+    },
+    "Upload Emoji" : {
 
     },
     "User Management" : {
@@ -654,6 +1018,12 @@
       "comment" : "Settings tooltip"
     },
     "Username" : {
+
+    },
+    "username#1234" : {
+
+    },
+    "Variable" : {
 
     },
     "Verification Code" : {
@@ -669,6 +1039,21 @@
 
     },
     "Wait!" : {
+
+    },
+    "Warning" : {
+
+    },
+    "Webhook" : {
+
+    },
+    "Webhook Name" : {
+
+    },
+    "Webhooks" : {
+
+    },
+    "Webhooks - %lld" : {
 
     },
     "Welcome to" : {

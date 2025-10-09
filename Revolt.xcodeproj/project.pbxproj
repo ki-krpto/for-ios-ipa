@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -101,6 +101,7 @@
 		17A7FE372C49DE6F0083B22F /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A7FE362C49DE6F0083B22F /* Member.swift */; };
 		17A7FE392C49EBD20083B22F /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A7FE382C49EBD20083B22F /* Image.swift */; };
 		17B375812C41FEC300FC7E6E /* Types.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DE7DB22BFAEC3F00C99188 /* Types.framework */; };
+		17B6B5792E0F7A4500209D66 /* ColorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B6B5782E0F7A4500209D66 /* ColorSheet.swift */; };
 		17B7128D2B03E9D700CFF61C /* FriendsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B7128C2B03E9D700CFF61C /* FriendsList.swift */; };
 		17BADE012B7019270021BB62 /* EmojiPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BADE002B7019270021BB62 /* EmojiPicker.swift */; };
 		17BB26772C8E923600D70AFC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 17BB26762C8E923600D70AFC /* SnapKit */; };
@@ -285,6 +286,7 @@
 		17A7FE362C49DE6F0083B22F /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
 		17A7FE382C49EBD20083B22F /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		17B1A0462BFC471C005D4664 /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		17B6B5782E0F7A4500209D66 /* ColorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSheet.swift; sourceTree = "<group>"; };
 		17B7128C2B03E9D700CFF61C /* FriendsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsList.swift; sourceTree = "<group>"; };
 		17BADE002B7019270021BB62 /* EmojiPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPicker.swift; sourceTree = "<group>"; };
 		17BB78B42CA4C45C000CAD87 /* ChannelPermissionsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPermissionsSettings.swift; sourceTree = "<group>"; };
@@ -352,6 +354,10 @@
 		DAAA4C0A29F2CF1200F41E52 /* Websocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Websocket.swift; sourceTree = "<group>"; };
 		DAAA4C0C29F2D16B00F41E52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		17945C802DFDB14C00BCD397 /* ChannelWebhooks */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ChannelWebhooks; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		175465C72C42147B0076B393 /* Frameworks */ = {
@@ -496,6 +502,7 @@
 		17429D952B4C91080036105A /* Channel */ = {
 			isa = PBXGroup;
 			children = (
+				17945C802DFDB14C00BCD397 /* ChannelWebhooks */,
 				17429D962B4C91170036105A /* ChannelSettings.swift */,
 				17429D982B4C931D0036105A /* ChannelOverviewSettings.swift */,
 				17BB78B62CA4C636000CAD87 /* ChannelPermissionsSettings */,
@@ -618,6 +625,7 @@
 		17BC47692B9CB4F500A593DA /* Sheets */ = {
 			isa = PBXGroup;
 			children = (
+				17B6B5782E0F7A4500209D66 /* ColorSheet.swift */,
 				17A6894E2D95FC6A00F25C6C /* MemberProfileSheet.swift */,
 				17E28E072AF319D500F6069F /* AddServerSheet.swift */,
 				17CE2E132AE709CE0059FB3A /* UserSheet.swift */,
@@ -854,6 +862,9 @@
 				1773C02A2C07DC32007B8867 /* PBXTargetDependency */,
 				175465D02C42147B0076B393 /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				17945C802DFDB14C00BCD397 /* ChannelWebhooks */,
+			);
 			name = Revolt;
 			packageProductDependencies = (
 				DA99EC5229D6148200419FDA /* Alamofire */,
@@ -1045,6 +1056,7 @@
 				170C23D62C224B6D0057E399 /* UserSettings.swift in Sources */,
 				178BB11B2B02FCDD001143A4 /* Responses.swift in Sources */,
 				176FA6E82C9336A900EF73C0 /* ViewInvite.swift in Sources */,
+				17B6B5792E0F7A4500209D66 /* ColorSheet.swift in Sources */,
 				173D698E2C7FF7FC00030E62 /* ChannelSearch.swift in Sources */,
 				17A589FA2C44781F00B9D85A /* AnyTransition.swift in Sources */,
 				17A21DF62CFA71AC0024C9F0 /* AddBot.swift in Sources */,

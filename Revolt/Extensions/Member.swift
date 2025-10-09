@@ -17,7 +17,7 @@ extension Member {
             .compactMap(\.colour)
             .last
             .map {
-                return parseCSSColor(currentTheme: theme, input: $0)
+                return parseCSSColorToShapeStyle(currentTheme: theme, input: $0)
             }
     }
 }

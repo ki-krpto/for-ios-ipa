@@ -110,6 +110,17 @@ struct MessageBox: View {
         case channels([Channel])
         case usersAndRoles([UserOrRole])
         case emojis([PickerEmoji])
+        
+        var isEmpty: Bool {
+            switch self {
+                case .channels(let array):
+                    array.isEmpty
+                case .usersAndRoles(let array):
+                    array.isEmpty
+                case .emojis(let array):
+                    array.isEmpty
+            }
+        }
     }
 
     struct Photo: Identifiable, Hashable {
@@ -273,7 +284,7 @@ struct MessageBox: View {
             }
             .animation(.default, value: channelReplies)
             
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 0) {
                 if selectedPhotos.count > 0 {
                     ScrollView(.horizontal) {
                         HStack {
@@ -324,137 +335,124 @@ struct MessageBox: View {
 
                 if let type = autoCompleteType {
                     let values = getAutocompleteValues(fromType: type)
-
-                    ScrollView(.horizontal) {
-                        LazyHStack {
-                            switch values {
-                                case .usersAndRoles(let usersOrRoles):
-                                    ForEach(usersOrRoles) { userOrRole in
-                                        Button {
-                                            let value: String
-                                            
-                                            switch userOrRole {
-                                                case .user(let user):
-                                                    value = "<@\(user.id)>"
-                                                case .role(let id, _):
-                                                    value = "<%\(id)>"
-                                                case .everyone:
-                                                    value = "@everyone"
-                                                case .online:
-                                                    value = "@online"
-                                            }
-                                            
-                                            withAnimation {
-                                                content = String(content.dropLast(autocompleteSearchValue.count + 1))
-                                                content.append(value)
-                                                autoCompleteType = nil
-                                            }
-                                        } label: {
-                                            HStack(spacing: 8) {
+                    
+                    if !values.isEmpty {
+                        ScrollView(.horizontal) {
+                            LazyHStack {
+                                switch values {
+                                    case .usersAndRoles(let usersOrRoles):
+                                        ForEach(usersOrRoles) { userOrRole in
+                                            Button {
+                                                let value: String
+                                                
                                                 switch userOrRole {
                                                     case .user(let user):
-                                                        Avatar(user: user.user, member: user.member, width: 24, height: 24)
-                                                        Text(verbatim: user.member?.nickname ?? user.user.display_name ?? user.user.username)
-                                                    case .role(let id, let role):
-                                                        Image(systemName: "at")
-                                                            .resizable()
-                                                            .scaledToFit()
-                                                            .frame(width: 16, height: 16)
-                                                            .foregroundStyle(viewState.theme.foreground)
-                                                        
-                                                        Text(verbatim: role.name)
-                                                            .foregroundStyle(role.colour.map { parseCSSColor(currentTheme: viewState.theme, input: $0) } ?? AnyShapeStyle(viewState.theme.foreground))
+                                                        value = "<@\(user.id)>"
+                                                    case .role(let id, _):
+                                                        value = "<%\(id)>"
                                                     case .everyone:
-                                                        Image(systemName: "at")
-                                                            .resizable()
-                                                            .scaledToFit()
-                                                            .frame(width: 16, height: 16)
-                                                            .foregroundStyle(viewState.theme.foreground)
-                                                        
-                                                        Text("everyone")
+                                                        value = "@everyone"
                                                     case .online:
-                                                        Image(systemName: "at")
-                                                            .resizable()
-                                                            .scaledToFit()
-                                                            .frame(width: 16, height: 16)
-                                                            .foregroundStyle(viewState.theme.foreground)
-                                                        
-                                                        Text("online")
-
+                                                        value = "@online"
                                                 }
-                                            }
-                                            .padding(6)
-                                        }
-                                        .background(viewState.theme.background2.color)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    }
-                                case .channels(let channels):
-                                    ForEach(channels) { channel in
-                                        Button {
-                                            withAnimation {
-                                                content = String(content.dropLast(autocompleteSearchValue.count + 1))
-                                                content.append("<#\(channel.id)>")
-                                                autoCompleteType = nil
-                                            }
-                                        } label: {
-                                            ChannelIcon(channel: channel)
+                                                
+                                                withAnimation {
+                                                    content = String(content.dropLast(autocompleteSearchValue.count + 1))
+                                                    content.append("\(value) ")
+                                                    autoCompleteType = nil
+                                                }
+                                            } label: {
+                                                HStack(spacing: 8) {
+                                                    switch userOrRole {
+                                                        case .user(let user):
+                                                            Avatar(user: user.user, member: user.member, width: 24, height: 24)
+                                                            Text(verbatim: user.member?.nickname ?? user.user.display_name ?? user.user.username)
+                                                        case .role(_, let role):
+                                                            Text("@\(role.name)")
+                                                                .foregroundStyle(role.colour.map { parseCSSColorToShapeStyle(currentTheme: viewState.theme, input: $0) } ?? AnyShapeStyle(viewState.theme.foreground))
+                                                        case .everyone:
+                                                            Text("@everyone")
+                                                        case .online:
+                                                            Text("@online")
+                                                            
+                                                    }
+                                                }
                                                 .padding(6)
+                                            }
+                                            .background(viewState.theme.background2.color)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
                                         }
-                                        .background(viewState.theme.background2.color)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    }
-                                case .emojis(let emojis):
-                                    ForEach(emojis) { emoji in
-                                        Button {
-                                            let emojiString: String
-                                            
-                                            if let emojiId = emoji.emojiId {
-                                                emojiString = ":\(emojiId):"
-                                            } else {
-                                                emojiString = String(String.UnicodeScalarView(emoji.base.compactMap(Unicode.Scalar.init)))
-                                            }
-                                            
-                                            withAnimation {
-                                                content = String(content.dropLast(autocompleteSearchValue.count + 1))
-                                                content.append(emojiString)
-                                                autoCompleteType = nil
-                                            }
-                                        } label: {
-                                            HStack(spacing: 8) {
-                                                if let id = emoji.emojiId {
-                                                    let emoji = viewState.emojis[id]!
-                                                    
-                                                    LazyImage(source: .emoji(id), height: 24, width: 24, clipTo: Rectangle())
-                                                    Text(verbatim: emoji.name)
-                                                } else {
-                                                    let emojiString = String(String.UnicodeScalarView(emoji.base.compactMap(Unicode.Scalar.init)))
-                                                    let image = convertEmojiToImage(text: emojiString)
-                                                    
-#if os(iOS)
-                                                    Image(uiImage: image)
-                                                        .resizable()
-                                                        .aspectRatio(contentMode: .fit)
-                                                        .frame(width: 24, height: 24)
-#elseif os(macOS)
-                                                    Image(nsImage: image)
-                                                        .resizable()
-                                                        .aspectRatio(contentMode: .fit)
-                                                        .frame(width: 24, height: 24)
-#endif
-                                                    
-                                                    Text(verbatim: emojiString)
+                                    case .channels(let channels):
+                                        ForEach(channels) { channel in
+                                            Button {
+                                                withAnimation {
+                                                    content = String(content.dropLast(autocompleteSearchValue.count + 1))
+                                                    content.append("<#\(channel.id)> ")
+                                                    autoCompleteType = nil
                                                 }
+                                            } label: {
+                                                ChannelIcon(channel: channel)
+                                                    .padding(6)
                                             }
-                                            .padding(6)
+                                            .background(viewState.theme.background2.color)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
                                         }
-                                        .background(viewState.theme.background2.color)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    }
+                                    case .emojis(let emojis):
+                                        ForEach(emojis) { emoji in
+                                            Button {
+                                                let emojiString: String
+                                                
+                                                if let emojiId = emoji.emojiId {
+                                                    emojiString = ":\(emojiId): "
+                                                } else {
+                                                    emojiString = String(String.UnicodeScalarView(emoji.base.compactMap(Unicode.Scalar.init)))
+                                                }
+                                                
+                                                withAnimation {
+                                                    content = String(content.dropLast(autocompleteSearchValue.count + 1))
+                                                    content.append(emojiString)
+                                                    autoCompleteType = nil
+                                                }
+                                            } label: {
+                                                HStack(spacing: 8) {
+                                                    if let id = emoji.emojiId {
+                                                        let emoji = viewState.emojis[id]!
+                                                        
+                                                        LazyImage(source: .emoji(id), height: 24, width: 24, clipTo: Rectangle())
+                                                        Text(verbatim: emoji.name)
+                                                    } else {
+                                                        let emojiString = String(String.UnicodeScalarView(emoji.base.compactMap(Unicode.Scalar.init)))
+                                                        let image = convertEmojiToImage(text: emojiString)
+                                                        
+#if os(iOS)
+                                                        Image(uiImage: image)
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .frame(width: 24, height: 24)
+#elseif os(macOS)
+                                                        Image(nsImage: image)
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .frame(width: 24, height: 24)
+#endif
+                                                        
+                                                        Text(verbatim: emojiString)
+                                                    }
+                                                }
+                                                .padding(6)
+                                            }
+                                            .background(viewState.theme.background2.color)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        }
+                                }
                             }
+                            .frame(height: 42)
+                            .background(.green)
+                            .padding(.bottom, 4)
+                            .background(.red)
                         }
-                        .frame(height: 42)
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
                 }
                 
                 if editing != nil {

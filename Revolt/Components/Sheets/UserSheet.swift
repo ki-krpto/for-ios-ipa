@@ -73,7 +73,7 @@ struct UserSheet: View {
     
     func getRoleColour(role: Role) -> AnyShapeStyle {
         if let colour = role.colour {
-            return parseCSSColor(currentTheme: viewState.theme, input: colour)
+            return parseCSSColorToShapeStyle(currentTheme: viewState.theme, input: colour)
         } else {
             return AnyShapeStyle(viewState.theme.foreground)
         }

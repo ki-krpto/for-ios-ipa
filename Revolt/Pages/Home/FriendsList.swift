@@ -56,17 +56,21 @@ struct FriendsList: View {
             ].filter({ !$0.1.isEmpty })
             
             Section {
-                HStack(spacing: 12) {
-                    Image(systemName: "person.crop.circle.fill.badge.plus")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                    
-                    Text("Add Friend")
-                }
-                .onTapGesture {
+                Button {
                     viewState.path.append(NavigationDestination.add_friend)
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "person.crop.circle.fill.badge.plus")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                        
+                        Text("Add Friend")
+                    }
                 }
+//                .onTapGesture {
+//                    viewState.path.append(NavigationDestination.add_friend)
+//                }
                 
                 HStack(spacing: 12) {
                     Image(systemName: "person.2")
