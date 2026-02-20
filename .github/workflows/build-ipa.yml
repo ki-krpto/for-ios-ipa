@@ -9,17 +9,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Force Resolve Dependencies
+      - name: Reset Package Cache
         run: |
-          # This helps fix the swift-syntax identity conflict
-          xcodebuild -resolvePackageDependencies \
-            -project Revolt.xcodeproj \
-            -scheme Revolt \
-            -parameters "IDEPackageSupportUseBuiltinSCM=YES"
+          # This forces Xcode to ignore old "remembered" package locations
+          xcodebuild -project Revolt.xcodeproj -resolvePackageDependencies
 
       - name: Build Unsigned Archive
         run: |
-          # Added -destination to ensure it builds for a generic iOS device
+          # We pass the SCM provider setting directly here
           xcodebuild archive \
             -project Revolt.xcodeproj \
             -scheme Revolt \
@@ -27,7 +24,8 @@ jobs:
             -destination "generic/platform=iOS" \
             -archivePath Stoat.xcarchive \
             CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_REQUIRED=NO \
+            -scmProvider xcode
 
       - name: Export to IPA
         run: |
