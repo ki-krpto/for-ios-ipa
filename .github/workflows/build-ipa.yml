@@ -1,6 +1,6 @@
 name: Build Unsigned IPA
 on: 
-  workflow_dispatch: # Allows you to trigger the build manually
+  workflow_dispatch: 
 
 jobs:
   build:
@@ -9,22 +9,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Dependencies
+      # Stoat usually requires Node and Yarn for the mobile app
+      - name: Install Node Dependencies
         run: |
-          # Stoat/Revolt usually requires dependencies like CocoaPods or Yarn
-          # Adjust this based on whether it's the React Native or Native version
-          if [ -f "Podfile" ]; then pod install; fi
+          yarn install || npm install
 
-      - name: Create Archive
+      # If the repo has a Podfile, this step is mandatory
+      - name: Install CocoaPods
+        run: |
+          cd ios && pod install || echo "No Podfile found"
+          cd ..
+
+      - name: Build Archive
         run: |
           xcodebuild archive \
-            -workspace *.xcworkspace \
+            -workspace ios/*.xcworkspace \
             -scheme Stoat \
             -configuration Release \
             -archivePath Stoat.xcarchive \
             CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY=""
+            CODE_SIGNING_REQUIRED=NO
 
       - name: Package IPA
         run: |
