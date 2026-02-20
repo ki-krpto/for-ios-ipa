@@ -15,14 +15,10 @@ jobs:
             -resolvePackageDependencies \
             -scmProvider xcode
 
-      - name: Find Generated Workspace
-        run: |
-          find . -name "*.xcworkspace" | head -10
-
       - name: Build Unsigned Archive
         run: |
           xcodebuild archive \
-            -workspace Revolt.xcodeproj/project.xcworkspace \
+            -project Revolt.xcodeproj \
             -scheme Revolt \
             -configuration Release \
             -destination "generic/platform=iOS" \
@@ -31,6 +27,9 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
             COMPILER_INDEX_STORE_ENABLE=NO \
+            -skipPackagePluginValidation \
+            -skipMacroValidation \
+            -disableAutomaticPackageResolution \
             -scmProvider xcode
 
       - name: Export to IPA
