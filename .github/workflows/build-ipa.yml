@@ -10,11 +10,11 @@ jobs:
 
       - name: List Schemes
         run: |
-          xcodebuild -workspace Revolt.xcworkspace -list
+          xcodebuild -project Revolt.xcodeproj -list
 
       - name: Resolve Package Dependencies
         run: |
-          xcodebuild -workspace Revolt.xcworkspace \
+          xcodebuild -project Revolt.xcodeproj \
             -scheme Revolt \
             -resolvePackageDependencies \
             -scmProvider xcode
@@ -22,7 +22,7 @@ jobs:
       - name: Build Unsigned Archive
         run: |
           xcodebuild archive \
-            -workspace Revolt.xcworkspace \
+            -project Revolt.xcodeproj \
             -scheme Revolt \
             -configuration Release \
             -destination "generic/platform=iOS" \
