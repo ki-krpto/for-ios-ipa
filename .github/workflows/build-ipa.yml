@@ -1,0 +1,38 @@
+name: Build IPA
+on: [workflow_dispatch] # Allows you to run it manually
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Install Dependencies
+        run: |
+          # If the project uses CocoaPods, uncomment the next line
+          # pod install
+          
+      - name: Build Archive
+        run: |
+          xcodebuild archive \
+            -project Revolt.xcodeproj \
+            -scheme Revolt \
+            -configuration Release \
+            -archivePath $GITHUB_WORKSPACE/Revolt.xcarchive \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Export IPA (Unsigned)
+        run: |
+          mkdir -p Payload
+          cp -r $GITHUB_WORKSPACE/Revolt.xcarchive/Products/Applications/*.app Payload/
+          zip -r Stoat.ipa Payload
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Stoat-IPA
+          path: Stoat.ipa
