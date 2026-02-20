@@ -1,43 +1,37 @@
-name: Build Unsigned IPA
-on: 
-  workflow_dispatch: 
+name: Build Stoat IPA
+on:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: macos-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Stoat usually requires Node and Yarn for the mobile app
-      - name: Install Node Dependencies
+      - name: Install Dependencies
         run: |
-          yarn install || npm install
+          # The iOS repo is native Swift, so we only need CocoaPods if a Podfile exists
+          if [ -f "Podfile" ]; then pod install; fi
 
-      # If the repo has a Podfile, this step is mandatory
-      - name: Install CocoaPods
+      - name: Build Unsigned Archive
         run: |
-          cd ios && pod install || echo "No Podfile found"
-          cd ..
-
-      - name: Build Archive
-        run: |
+          # The project name in the repo is "Revolt"
           xcodebuild archive \
-            -workspace ios/*.xcworkspace \
-            -scheme Stoat \
+            -project Revolt.xcodeproj \
+            -scheme Revolt \
             -configuration Release \
             -archivePath Stoat.xcarchive \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_ALLOWED=NO
 
-      - name: Package IPA
+      - name: Export to IPA
         run: |
           mkdir -p Payload
           cp -r Stoat.xcarchive/Products/Applications/*.app Payload/
           zip -r Stoat-Unsigned.ipa Payload
 
-      - name: Upload Artifact
+      - name: Upload Finished IPA
         uses: actions/upload-artifact@v4
         with:
-          name: stoat-ipa
+          name: stoat-ios-app
           path: Stoat-Unsigned.ipa
