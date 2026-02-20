@@ -1,38 +1,39 @@
-name: Build IPA
-on: [workflow_dispatch] # Allows you to run it manually
+name: Build Unsigned IPA
+on: 
+  workflow_dispatch: # Allows you to trigger the build manually
 
 jobs:
   build:
     runs-on: macos-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up Xcode
-        run: sudo xcode-select -s /Applications/Xcode.app
 
       - name: Install Dependencies
         run: |
-          # If the project uses CocoaPods, uncomment the next line
-          # pod install
-          
-      - name: Build Archive
+          # Stoat/Revolt usually requires dependencies like CocoaPods or Yarn
+          # Adjust this based on whether it's the React Native or Native version
+          if [ -f "Podfile" ]; then pod install; fi
+
+      - name: Create Archive
         run: |
           xcodebuild archive \
-            -project Revolt.xcodeproj \
-            -scheme Revolt \
+            -workspace *.xcworkspace \
+            -scheme Stoat \
             -configuration Release \
-            -archivePath $GITHUB_WORKSPACE/Revolt.xcarchive \
-            CODE_SIGNING_ALLOWED=NO
+            -archivePath Stoat.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
 
-      - name: Export IPA (Unsigned)
+      - name: Package IPA
         run: |
           mkdir -p Payload
-          cp -r $GITHUB_WORKSPACE/Revolt.xcarchive/Products/Applications/*.app Payload/
-          zip -r Stoat.ipa Payload
-          
+          cp -r Stoat.xcarchive/Products/Applications/*.app Payload/
+          zip -r Stoat-Unsigned.ipa Payload
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Stoat-IPA
-          path: Stoat.ipa
+          name: stoat-ipa
+          path: Stoat-Unsigned.ipa
