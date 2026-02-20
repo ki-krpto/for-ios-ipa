@@ -8,9 +8,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: List Schemes
+        run: |
+          xcodebuild -workspace Revolt.xcworkspace -list
+
       - name: Resolve Package Dependencies
         run: |
           xcodebuild -workspace Revolt.xcworkspace \
+            -scheme Revolt \
             -resolvePackageDependencies \
             -scmProvider xcode
 
